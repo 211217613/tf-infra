@@ -1,5 +1,5 @@
 resource "docker_image" "image_id" {
-  name         = "${var.image_name}"
+  name         = "${lookup(var.image_name, var.env)}"
   keep_locally = true
 }
 
@@ -9,10 +9,10 @@ resource "docker_image" "ubuntu" {
 }
 
 resource "docker_container" "container_id" {
-  name  = "${var.container_name}"
+  name  = "${lookup(var.container_name, var.env)}"
   image = "${docker_image.image_id.latest}"
   ports {
     internal = "${var.internal_port}"
-    external = "${var.external_port}"
+    external = "${lookup(var.external_port, var.env)}"
   }
 }
